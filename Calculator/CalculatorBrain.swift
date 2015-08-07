@@ -5,9 +5,6 @@
 //  Created by Gordon Ho on 8/6/15.
 //  Copyright (c) 2015 Gordon Ho. All rights reserved.
 //
-//  using GitHub for version control
-//  see if remote location changed?
-//  completed changes
 
 import Foundation
 
