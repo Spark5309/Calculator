@@ -7,6 +7,7 @@
 //
 //  using GitHub for version control
 //  see if remote location changed?
+//  completed changes
 
 import Foundation
 
