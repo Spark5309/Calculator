@@ -99,7 +99,7 @@ class CalculatorBrain
         if let constant = knownOps[symbol] {
             opStack.append(constant)
         }
-        return M_PI
+        return evaluate()
     }
     
     func performOperation(symbol: String) -> Double? {

@@ -42,7 +42,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func constantPIEntered(sender: UIButton) {
-        userIsInTheMiddleOfTypingANumber = false
+        if userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
         if let constant = sender.currentTitle {
             if let result = brain.pushConstant(constant) {
                 displayValue = result
@@ -68,6 +70,7 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
+        userEnteredADecimal = false
         if let result = brain.pushOperand(displayValue) {
             displayValue = result
         } else {
