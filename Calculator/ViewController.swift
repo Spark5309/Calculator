@@ -13,23 +13,45 @@ class ViewController: UIViewController {
     @IBOutlet weak var display: UILabel!
 
     var userIsInTheMiddleOfTypingANumber = false
+    var userEnteredADecimal = false
     
     var brain = CalculatorBrain()
 
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTypingANumber {
-            display.text = display.text! + digit
-        } else {
-            if digit == "." {
-                display.text = "0."
-            } else {
-                display.text = digit
+            if !(digit == "." && userEnteredADecimal) {
+                display.text = display.text! + digit
             }
+        } else {
+            display.text = digit
             userIsInTheMiddleOfTypingANumber = true
         }
-        
+        if digit == "." {
+            userEnteredADecimal = true
+        }
     }
+    
+    @IBAction func removeDigit(sender: UIButton) {
+        if userIsInTheMiddleOfTypingANumber{
+            if !display.text!.isEmpty {
+                let x = display.text!.endIndex
+                println("end Index = \(x)")
+            }
+        }
+    }
+    
+    @IBAction func constantPIEntered(sender: UIButton) {
+        userIsInTheMiddleOfTypingANumber = false
+        if let constant = sender.currentTitle {
+            if let result = brain.pushConstant(constant) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
+        }
+    }
+    
     
     @IBAction func operate(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {

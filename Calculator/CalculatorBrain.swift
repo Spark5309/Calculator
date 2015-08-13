@@ -13,6 +13,7 @@ class CalculatorBrain
     private enum Op: Printable
     {
         case Operand(Double)
+        case Constant(String)
         case UnaryOperation(String, Double -> Double)
         case BinaryOperation(String, (Double, Double) -> Double)
         
@@ -21,6 +22,8 @@ class CalculatorBrain
                 switch self {
                 case .Operand(let operand):
                     return "\(operand)"
+                case .Constant(let symbol):
+                    return symbol
                 case .UnaryOperation(let symbol, _):
                     return symbol
                 case .BinaryOperation(let symbol, _):
@@ -38,6 +41,8 @@ class CalculatorBrain
         func learnOp(op: Op) {
             knownOps[op.description] = op
         }
+
+        learnOp(Op.Constant("π"))
         
         learnOp(Op.BinaryOperation("✕", *))
         learnOp(Op.BinaryOperation("÷") { $1 / $0 })
@@ -57,6 +62,10 @@ class CalculatorBrain
             switch op {
             case .Operand(let operand):
                 return (operand, remainingOps)
+            case .Constant(let symbol):
+                if symbol == "π" {
+                    return (M_PI, remainingOps)
+                }
             case .UnaryOperation(_, let operation):
                 let operandEvaluation = evaluate(remainingOps)
                 if let operand = operandEvaluation.result {
@@ -84,6 +93,13 @@ class CalculatorBrain
     func pushOperand(operand: Double) -> Double? {
         opStack.append(Op.Operand(operand))
         return evaluate()
+    }
+    
+    func pushConstant(symbol:String) -> Double? {
+        if let constant = knownOps[symbol] {
+            opStack.append(constant)
+        }
+        return M_PI
     }
     
     func performOperation(symbol: String) -> Double? {

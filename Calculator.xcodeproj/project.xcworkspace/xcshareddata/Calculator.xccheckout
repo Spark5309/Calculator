@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>B6185989-2E6D-4C66-B251-DCC45CCAD064</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Calculator</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>3421BFADA804AB2180E1AEA80355FE035C418738</key>
 		<string>https://github.com/Spark5309/Calculator-Stanford.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Calculator.xcodeproj</string>
+	<string>Calculator.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>3421BFADA804AB2180E1AEA80355FE035C418738</key>
