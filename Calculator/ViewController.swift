@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var history: UILabel!
 
     var userIsInTheMiddleOfTypingANumber = false
     var userEnteredADecimal = false
@@ -35,8 +36,12 @@ class ViewController: UIViewController {
     @IBAction func removeDigit(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber{
             if !display.text!.isEmpty {
-                let x = display.text!.endIndex
-                println("end Index = \(x)")
+                let x = dropLast(display.text!)
+                if x.isEmpty {
+                    display.text = "0"
+                } else {
+                    display.text = x
+                }
             }
         }
     }
