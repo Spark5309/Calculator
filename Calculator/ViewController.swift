@@ -57,6 +57,7 @@ class ViewController: UIViewController {
                 displayValue = 0
             }
         }
+        history.text = brain.showHistory()
     }
     
     
@@ -71,6 +72,7 @@ class ViewController: UIViewController {
                 displayValue = 0
             }
         }
+        history.text = brain.showHistory()
     }
     
     @IBAction func enter() {
@@ -81,6 +83,7 @@ class ViewController: UIViewController {
         } else {
             displayValue = 0
         }
+        history.text = brain.showHistory()
     }
     
     var displayValue: Double {
@@ -90,6 +93,7 @@ class ViewController: UIViewController {
         set {
             display.text = "\(newValue)"
             userIsInTheMiddleOfTypingANumber = false
+            userEnteredADecimal = false
         }
     }
     

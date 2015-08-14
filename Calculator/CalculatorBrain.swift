@@ -109,4 +109,14 @@ class CalculatorBrain
         return evaluate()
     }
     
+    func showHistory() -> String {
+        var history = " "
+        if !opStack.isEmpty {
+            for ops in opStack {
+                history += "\(ops) "
+            }
+        }
+        return history
+    }
+    
 }
