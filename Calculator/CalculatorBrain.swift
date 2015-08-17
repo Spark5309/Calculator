@@ -109,13 +109,53 @@ class CalculatorBrain
         return evaluate()
     }
     
+    private func traverse(ops: [Op]) -> (result: String?, remainingOps: [Op])
+    {
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            switch op {
+            case .Operand(let operand):
+                return ("\(operand)", remainingOps)
+            case .Constant(let symbol):
+                if symbol == "π" {
+                    return (symbol, remainingOps)
+                }
+            case .UnaryOperation(_, let operation):
+                let operandEvaluation = traverse(remainingOps)
+                if let operand = operandEvaluation.result {
+                    return ("\(operation(operand))", operandEvaluation.remainingOps)
+                }
+            case .BinaryOperation(_, let operation):
+                let op1Evaluation = traverse(remainingOps)
+                if let operand1 = op1Evaluation.result {
+                    let op2Evaluation = traverse(op1Evaluation.remainingOps)
+                    if let operand2 = op2Evaluation.result {
+                        return (operation(operand1, operand2), op2Evaluation.remainingOps)
+                    }
+                }
+            }
+        }
+        return (nil, ops)
+    }
+    
+    func traverse() -> String? {
+        let (result, remainder) = traverse(opStack)
+        println("\(opStack) = \(result) with \(remainder) left over")
+        return result
+    }
+
     func showHistory() -> String {
         var history = " "
+        
         if !opStack.isEmpty {
             for ops in opStack {
                 history += "\(ops) "
             }
         }
+        println(history)
+        
+        
         return history
     }
     
