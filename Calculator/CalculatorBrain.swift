@@ -86,7 +86,7 @@ class CalculatorBrain
     
     func evaluate() -> Double? {
         let (result, remainder) = evaluate(opStack)
-        println("\(opStack) = \(result) with \(remainder) left over")
+//        println("\(opStack) = \(result) with \(remainder) left over")
         return result
     }
     
@@ -118,20 +118,18 @@ class CalculatorBrain
             case .Operand(let operand):
                 return ("\(operand)", remainingOps)
             case .Constant(let symbol):
-                if symbol == "π" {
-                    return (symbol, remainingOps)
+                return (symbol, remainingOps)
+            case .UnaryOperation(let symbol, let operation):
+                let operandTraversal = traverse(remainingOps)
+                if let operand = operandTraversal.result {
+                    return (symbol+"("+operand+")", operandTraversal.remainingOps)
                 }
-            case .UnaryOperation(_, let operation):
-                let operandEvaluation = traverse(remainingOps)
-                if let operand = operandEvaluation.result {
-                    return ("\(operation(operand))", operandEvaluation.remainingOps)
-                }
-            case .BinaryOperation(_, let operation):
-                let op1Evaluation = traverse(remainingOps)
-                if let operand1 = op1Evaluation.result {
-                    let op2Evaluation = traverse(op1Evaluation.remainingOps)
-                    if let operand2 = op2Evaluation.result {
-                        return (operation(operand1, operand2), op2Evaluation.remainingOps)
+            case .BinaryOperation(let symbol, let operation):
+                let op1Traversal = traverse(remainingOps)
+                if let operand1 = op1Traversal.result {
+                    let op2Traversal = traverse(op1Traversal.remainingOps)
+                    if let operand2 = op2Traversal.result {
+                        return (operand1+symbol+operand2, op2Traversal.remainingOps)
                     }
                 }
             }
@@ -145,7 +143,7 @@ class CalculatorBrain
         return result
     }
 
-    func showHistory() -> String {
+    func showHistory() -> String? {
         var history = " "
         
         if !opStack.isEmpty {
@@ -156,7 +154,7 @@ class CalculatorBrain
         println(history)
         
         
-        return history
+        return traverse()
     }
     
 }
