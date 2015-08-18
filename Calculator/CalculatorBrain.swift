@@ -36,6 +36,7 @@ class CalculatorBrain
     private var opStack = [Op]()
     
     private var knownOps = [String:Op]()
+    private var orderOperation = [String:Int]()
     
     init() {
         func learnOp(op: Op) {
@@ -52,6 +53,15 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
+
+        orderOperation["√"] = 100
+        orderOperation["sin"] = 100
+        orderOperation["cos"] = 100
+        orderOperation["✕"] = 50
+        orderOperation["÷"] = 50
+        orderOperation["+"] = 10
+        orderOperation["-"] = 10
+        
     }
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op])
@@ -119,17 +129,23 @@ class CalculatorBrain
                 return ("\(operand)", remainingOps)
             case .Constant(let symbol):
                 return (symbol, remainingOps)
-            case .UnaryOperation(let symbol, let operation):
+            case .UnaryOperation(let symbol, _):
                 let operandTraversal = traverse(remainingOps)
                 if let operand = operandTraversal.result {
-                    return (symbol+"("+operand+")", operandTraversal.remainingOps)
+                    return (symbol + "(" + operand + ")", operandTraversal.remainingOps)
                 }
-            case .BinaryOperation(let symbol, let operation):
+            case .BinaryOperation(let symbol, _):
+                var historyOperation : String
                 let op1Traversal = traverse(remainingOps)
                 if let operand1 = op1Traversal.result {
                     let op2Traversal = traverse(op1Traversal.remainingOps)
                     if let operand2 = op2Traversal.result {
-                        return (operand1+symbol+operand2, op2Traversal.remainingOps)
+                        if symbol == "÷" || symbol == "-" {
+                            historyOperation = operand2 + symbol + operand1
+                        } else {
+                            historyOperation = operand1 + symbol + operand2
+                        }
+                        return (historyOperation, op2Traversal.remainingOps)
                     }
                 }
             }
@@ -155,6 +171,10 @@ class CalculatorBrain
         
         
         return traverse()
+    }
+    
+    func clearCalculator() {
+        opStack = []
     }
     
 }

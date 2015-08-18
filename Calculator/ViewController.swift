@@ -33,12 +33,23 @@ class ViewController: UIViewController {
         }
     }
     
+    
+    @IBAction func clearButtonPressed(sender: UIButton) {
+        brain.clearCalculator()
+        history.text = " "
+        display.text = "0"
+        userIsInTheMiddleOfTypingANumber = false
+        userEnteredADecimal = false
+    }
+    
     @IBAction func removeDigit(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber{
             if !display.text!.isEmpty {
                 let x = dropLast(display.text!)
                 if x.isEmpty {
                     display.text = "0"
+                    userIsInTheMiddleOfTypingANumber = false
+                    userEnteredADecimal = false
                 } else {
                     display.text = x
                 }
