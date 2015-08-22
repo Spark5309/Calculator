@@ -21,15 +21,12 @@ class ViewController: UIViewController {
     @IBAction func appendDigit(sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTypingANumber {
-            if !(digit == "." && userEnteredADecimal) {
+            if digit != "." || display.text!.rangeOfString(".") == nil {
                 display.text = display.text! + digit
             }
         } else {
             display.text = digit
             userIsInTheMiddleOfTypingANumber = true
-        }
-        if digit == "." {
-            userEnteredADecimal = true
         }
     }
     
@@ -39,7 +36,6 @@ class ViewController: UIViewController {
         history.text = " "
         display.text = "0"
         userIsInTheMiddleOfTypingANumber = false
-        userEnteredADecimal = false
     }
     
     @IBAction func removeDigit(sender: UIButton) {
