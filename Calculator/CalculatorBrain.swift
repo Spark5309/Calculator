@@ -119,7 +119,7 @@ class CalculatorBrain
         return evaluate()
     }
     
-    private func traverse(ops: [Op]) -> (result: String?, remainingOps: [Op])
+    private func traverse(ops: [Op], prevOperation: String) -> (result: String?, remainingOps: [Op])
     {
         if !ops.isEmpty {
             var remainingOps = ops
@@ -130,20 +130,25 @@ class CalculatorBrain
             case .Constant(let symbol):
                 return (symbol, remainingOps)
             case .UnaryOperation(let symbol, _):
-                let operandTraversal = traverse(remainingOps)
+                let operandTraversal = traverse(remainingOps, prevOperation: prevOperation)
                 if let operand = operandTraversal.result {
                     return (symbol + "(" + operand + ")", operandTraversal.remainingOps)
                 }
             case .BinaryOperation(let symbol, _):
                 var historyOperation : String
-                let op1Traversal = traverse(remainingOps)
+                let op1Traversal = traverse(remainingOps, prevOperation: symbol)
                 if let operand1 = op1Traversal.result {
-                    let op2Traversal = traverse(op1Traversal.remainingOps)
+                    let op2Traversal = traverse(op1Traversal.remainingOps, prevOperation: symbol)
                     if let operand2 = op2Traversal.result {
                         if symbol == "÷" || symbol == "-" {
                             historyOperation = operand2 + symbol + operand1
                         } else {
                             historyOperation = operand1 + symbol + operand2
+                        }
+                        if (symbol == "+" || symbol == "-") {
+                            if !(prevOperation == "+" || prevOperation == "-") {
+                                historyOperation = "(" + historyOperation + ")"
+                            }
                         }
                         return (historyOperation, op2Traversal.remainingOps)
                     }
@@ -154,7 +159,7 @@ class CalculatorBrain
     }
     
     func traverse() -> String? {
-        let (result, remainder) = traverse(opStack)
+        let (result, remainder) = traverse(opStack, prevOperation: "+")
         println("\(opStack) = \(result) with \(remainder) left over")
         return result
     }
